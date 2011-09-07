@@ -1,0 +1,15 @@
+#!/bin/sh
+
+UA=`youtube-dl --dump-user-agent`
+TMPDIR=`mktemp -d`
+COOKIES="$TMPDIR/cookies"
+
+VIDEO_DATA=`youtube-dl -o "[%(upload_date)s][%(id)s] %(title)s (by %(uploader)s).%(ext)s" --get-url --get-filename --cookies=${COOKIES} "$@"`
+
+FILENAME=`echo "$VIDEO_DATA" | tail -n 1 | tr ":\"" ";'" | tr -d "\\\/*?<>|"`
+URL=`echo "$VIDEO_DATA" | head -n 1`
+
+echo "$FILENAME"
+aria2c -j 3 -x 3 -s 3 -k 1M --load-cookies="$COOKIES" -U "$UA" -o "$FILENAME" "$URL"
+
+rm -r "$TMPDIR"

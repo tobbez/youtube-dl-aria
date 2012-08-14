@@ -10,6 +10,6 @@ FILENAME=`echo "$VIDEO_DATA" | tail -n 1 | tr ":\"" ";'" | tr -d "\\\/*?<>|"`
 URL=`echo "$VIDEO_DATA" | head -n 1`
 
 echo "$FILENAME"
-aria2c -j 3 -x 3 -s 3 -k 1M --load-cookies="$COOKIES" -U "$UA" -o "$FILENAME" "$URL"
+aria2c --enable-async-dns6 -j 3 -x 3 -s 3 -k 1M --load-cookies="$COOKIES" -U "$UA" -o "$FILENAME" "$URL"
 
 rm -r "$TMPDIR"

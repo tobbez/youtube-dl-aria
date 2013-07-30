@@ -11,12 +11,15 @@ then
 	ARIA_DNS_FLAGS="--async-dns=false"
 fi
 
-VIDEO_DATA=`youtube-dl -o "[%(upload_date)s][%(id)s] %(title)s (by %(uploader)s).%(ext)s" --get-url --get-filename --cookies=${COOKIES} "$@"`
+VIDEO_DATA=`youtube-dl -o "%(title)s.%(ext)s" --get-url --get-filename --cookies=${COOKIES} "$@"`
+LINES=`echo "$VIDEO_DATA" | wc -l`
 
-FILENAME=`echo "$VIDEO_DATA" | tail -n 1 | tr ":\"" ";'" | tr -d "\\\/*?<>|"`
-URL=`echo "$VIDEO_DATA" | head -n 1`
-
-echo "$FILENAME"
-aria2c $ARIA_DNS_FLAGS -j 3 -x 3 -s 3 -k 1M --load-cookies="$COOKIES" -U "$UA" -o "$FILENAME" "$URL"
-
+for i in `seq 1 2 $LINES`
+do
+    j=`expr $i + 1`
+    URL=`echo "$VIDEO_DATA" | head -n "$i" | tail -n 1`
+    FILENAME=`echo "$VIDEO_DATA" | head -n "$j" | tail -n 1 | tr ":\"" ";'" | tr -d "\\\/*?<>|"`
+    echo "$FILENAME"
+    aria2c $ARIA_DNS_FLAGS -j 10 -x 10 -s 10 -k 1M --load-cookies="$COOKIES" -U "$UA" -o "$FILENAME" "$URL"
+done
 rm -r "$TMPDIR"

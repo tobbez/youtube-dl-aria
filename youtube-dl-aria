@@ -4,6 +4,8 @@ UA=`youtube-dl --dump-user-agent`
 TMPDIR=`mktemp -d`
 COOKIES="$TMPDIR/cookies"
 
+trap "rm -rf $TMPDIR" 0
+
 ARIA_DNS_FLAGS=""
 aria2c -h#all|grep -- '--async-dns' >/dev/null 2>&1
 if [ $? -eq 0 ]
@@ -23,5 +25,3 @@ do
 	echo "$CLEANED_FILENAME"
 	aria2c $ARIA_DNS_FLAGS -c -j 3 -x 3 -s 3 -k 1M --load-cookies="$COOKIES" -U "$UA" -o "$CLEANED_FILENAME" "$URL"
 done < $TMPDIR/video_data
-
-rm -r "$TMPDIR"

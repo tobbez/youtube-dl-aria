@@ -1,0 +1,15 @@
+youtube-dl-aria
+===============
+A wrapper that speeds up youtube-dl downloads by utilising aria2's
+capability of opening multiple connections per server.
+
+
+Dependencies
+============
+ * youtube-dl (http://rg3.github.io/youtube-dl/)
+ * aria2 (http://aria2.sourceforge.net/)
+
+
+License
+=======
+ISC.

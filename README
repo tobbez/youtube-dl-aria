@@ -1,3 +1,18 @@
+PLEASE NOTE:
+
+youtube-dl-aria is obsolete - youtube-dl added builtin support for external
+downloaders early 2015.
+
+If you want to duplicate the behaviour of youtube-dl-aria using just
+youtube-dl, you can run:
+
+mkdir -p ~/.config/youtube-dl/
+cat > ~/.config/youtube-dl/config <<EOF
+-o "[%(upload_date)s][%(id)s] %(title)s (by %(uploader)s).%(ext)s"
+--external-downloader aria2c
+--external-downloader-args "-c -j 3 -x 3 -s 3 -k 1M"
+EOF
+
 youtube-dl-aria
 ===============
 A wrapper that speeds up youtube-dl downloads by utilising aria2's
